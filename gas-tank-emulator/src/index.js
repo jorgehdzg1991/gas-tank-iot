@@ -52,7 +52,24 @@ async function getGasTank() {
 (async function init() {
   await registerThingType();
   const gasTank = await getGasTank();
-  gasTank.totalCapacity = 100;
-  gasTank.remainingCapacity = 80;
+
+  let totalCapacity;
+  let remainingCapacity;
+
+  for (let i = 2; i < process.argv.length; i++) {
+    const option = process.argv[i];
+    if (option.startsWith('--total')) {
+      totalCapacity = parseInt(option.split(':')[1]);
+    } else if(option.startsWith('--remaining')) {
+      remainingCapacity = parseInt(option.split(':')[1]);
+    }
+  }
+
+  if (!totalCapacity || !remainingCapacity) {
+    throw new Error('Missing total or remaining capacity options.');
+  }
+
+  gasTank.totalCapacity = totalCapacity;
+  gasTank.remainingCapacity = remainingCapacity;
   gasTank.updateGasMeasurement();
 })();
