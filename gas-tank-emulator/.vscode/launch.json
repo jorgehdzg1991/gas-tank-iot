@@ -7,10 +7,21 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "yarn register",
       "program": "${workspaceFolder}/src/index.js",
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/babel-node",
       "runtimeArgs": ["--nolazy"],
+      "args": ["register"],
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "yarn send-status",
+      "program": "${workspaceFolder}/src/index.js",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/babel-node",
+      "runtimeArgs": ["--nolazy"],
+      "args": ["send-status", "--total:100", "--remaining:20"],
       "envFile": "${workspaceFolder}/.env"
     }
   ]

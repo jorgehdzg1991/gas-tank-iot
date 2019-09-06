@@ -5,6 +5,7 @@ import ThingType from './utils/ThingType';
 import GasTankRegistration from './utils/GasTankRegistration';
 import log from './utils/Logging';
 import GasTank from './models/GasTank';
+// import setupListener from './utils/CognitoShadowListener';
 
 const gasTankDataPath = path.join(__dirname, '../gasTank.json');
 
@@ -53,23 +54,30 @@ async function getGasTank() {
   await registerThingType();
   const gasTank = await getGasTank();
 
-  let totalCapacity;
-  let remainingCapacity;
+  if (process.argv[2] === 'register') {
+    await registerGasTank();
+  } else if (process.argv[2] === 'send-status') {
+    let totalCapacity;
+    let remainingCapacity;
 
-  for (let i = 2; i < process.argv.length; i++) {
-    const option = process.argv[i];
-    if (option.startsWith('--total')) {
-      totalCapacity = parseInt(option.split(':')[1]);
-    } else if(option.startsWith('--remaining')) {
-      remainingCapacity = parseInt(option.split(':')[1]);
+    for (let i = 3; i < process.argv.length; i += 1) {
+      const option = process.argv[i];
+      if (option.startsWith('--total')) {
+        totalCapacity = parseInt(option.split(':')[1], 10);
+      } else if (option.startsWith('--remaining')) {
+        remainingCapacity = parseInt(option.split(':')[1], 10);
+      }
     }
-  }
 
-  if (!totalCapacity || !remainingCapacity) {
-    throw new Error('Missing total or remaining capacity options.');
-  }
+    if (!totalCapacity || !remainingCapacity) {
+      throw new Error('Missing total or remaining capacity options.');
+    }
 
-  gasTank.totalCapacity = totalCapacity;
-  gasTank.remainingCapacity = remainingCapacity;
-  gasTank.updateGasMeasurement();
+    gasTank.totalCapacity = totalCapacity;
+    gasTank.remainingCapacity = remainingCapacity;
+    // await setupListener('edgar@mail.com', '12345678', gasTank.name);
+    await gasTank.updateGasMeasurement();
+  } else {
+    throw new Error('unknown operation');
+  }
 })();
