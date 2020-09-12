@@ -20,7 +20,7 @@
     "jade": "~1.11.0",
     "jwt-decode": "^2.2.0",
     "morgan": "~1.9.1",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "prettier": "^1.18.2"
   },
   "devDependencies": {
